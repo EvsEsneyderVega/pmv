@@ -1,0 +1,21 @@
+# Node.js
+node_modules/
+npm-debug.log
+.DS_Store
+
+# Base de datos local
+database.db
+
+# Compilados o ejecutables
+*.exe
+
+# Archivos de configuración sensibles (opcional)
+.env
+
+# Archivos temporales
+*.log
+*.bak
+*.tmp
+
+# Sistema operativo
+Thumbs.db

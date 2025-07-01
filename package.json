@@ -1,0 +1,17 @@
+
+{
+  "name": "insidetemporal-server",
+  "version": "1.0.0",
+  "description": "Servidor local para InsideTemporal",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "bin": "server.js",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "pkg": {
+    "targets": [ "node16-win-x64" ]
+  }
+}
