@@ -3,8 +3,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
-const path = require('path');
 const app = express();
+const path = require('path');
+const verificarToken = require('./middlewares/verificarToken');
+
 require('dotenv').config();
 
 //configuracion de puerto
@@ -18,8 +20,33 @@ app.use(bodyParser.urlencoded({extended:true}));
 const mysql = require('mysql2');
 
 app.get('/',(req,res)=>{
-    res.send('pmv operativo');
+    res.sendFile(path.join(__dirname,'views','login.html'));
 });
+
+// Vista para usuario Ingreso (nivel 1)
+app.get('/vista/ingreso', verificarToken, (req, res) => {
+    if (req.usuario.nivel != 1) {
+        return res.status(403).send('Acceso denegado');
+    }
+    res.sendFile(path.join(__dirname, 'vistas', 'ingreso.html'));
+});
+
+// Vista para Calidad (nivel 2)
+app.get('/vista/calidad', verificarToken, (req, res) => {
+    if (req.usuario.nivel != 2) {
+        return res.status(403).send('Acceso denegado');
+    }
+    res.sendFile(path.join(__dirname, 'vistas', 'calidad.html'));
+});
+
+// Vista para Admin (nivel 3)
+app.get('/vista/admin', verificarToken, (req, res) => {
+    if (req.usuario.nivel != 3) {
+        return res.status(403).send('Acceso denegado');
+    }
+    res.sendFile(path.join(__dirname, 'vistas', 'admin.html'));
+});
+
 
 const rutasUsuario = require('./routes/usuario.routes.js');
 app.use('/api/usuarios',rutasUsuario);
