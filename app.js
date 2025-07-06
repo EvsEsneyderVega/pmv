@@ -10,7 +10,7 @@ const verificarToken = require('./middlewares/verificarToken');
 require('dotenv').config();
 
 //configuracion de puerto
-const PORT = process.env.port || 3000;
+const PORT = process.env.PORT || 3000;
 
 //midlewares
 app.use(bodyParser.json());
@@ -28,7 +28,7 @@ app.get('/vista/ingreso', verificarToken, (req, res) => {
     if (req.usuario.nivel != 1) {
         return res.status(403).send('Acceso denegado');
     }
-    res.sendFile(path.join(__dirname, 'vistas', 'ingreso.html'));
+    res.sendFile(path.join(__dirname, 'views', 'ingreso.html'));
 });
 
 // Vista para Calidad (nivel 2)
@@ -36,7 +36,7 @@ app.get('/vista/calidad', verificarToken, (req, res) => {
     if (req.usuario.nivel != 2) {
         return res.status(403).send('Acceso denegado');
     }
-    res.sendFile(path.join(__dirname, 'vistas', 'calidad.html'));
+    res.sendFile(path.join(__dirname, 'views', 'calidad.html'));
 });
 
 // Vista para Admin (nivel 3)
@@ -44,7 +44,7 @@ app.get('/vista/admin', verificarToken, (req, res) => {
     if (req.usuario.nivel != 3) {
         return res.status(403).send('Acceso denegado');
     }
-    res.sendFile(path.join(__dirname, 'vistas', 'admin.html'));
+    res.sendFile(path.join(__dirname, 'views', 'admin.html'));
 });
 
 
