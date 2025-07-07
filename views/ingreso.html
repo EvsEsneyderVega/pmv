@@ -1,1 +1,1246 @@
-<h1>ingreso</h1>
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Ingreso</title>
+
+	<!-- Mobile Specific Metas -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<!-- Font-->
+	<link rel="stylesheet" type="text/css" href="css/opensans-font.css">
+	<link rel="icon" type="image/x-icon" href="favicon.ico">
+	<link rel="stylesheet" type="text/css"
+		href="fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
+	<!-- datepicker -->
+	<link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css">
+	<!-- Main Style Css -->
+	<link rel="stylesheet" href="css/style.css" />
+
+	<style>
+		.input-error-placeholder::placeholder {
+			color: red;
+		}
+
+		.videoc,
+		.imgc {
+			max-width: 400px;
+			border: 2px solid #000;
+			margin: 10px;
+		}
+
+		#signature-pad {
+			border: 1px solid #fff;
+			width: 400px;
+			height: 200px;
+		}
+
+		#buttons {
+			margin-top: 10px;
+		}
+
+
+		/* loader */
+
+		*,
+		*::before,
+		*::after {
+			box-sizing: border-box;
+		}
+
+		.icon-credit {
+			position: fixed;
+			bottom: 5px;
+			width: 100%;
+			text-align: center;
+			font-size: 11px;
+
+			a {
+				color: #222222;
+			}
+		}
+
+		.loader {
+			position: fixed;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			background: #383a4f;
+			background-image: radial-gradient(#bdc1eb, #383a4f);
+			display: flex;
+			justify-content: center;
+			align-items: center;
+
+			&::before,
+			&::after {
+				content: '';
+				position: absolute;
+				border-radius: 50%;
+				animation: tracks 10s linear forwards;
+
+			}
+
+			&::before {
+				width: 265px;
+				height: 265px;
+				border: 11px solid rgba(0, 0, 0, 0);
+			}
+
+			&::after {
+				width: 95px;
+				height: 95px;
+				border: 8px solid rgba(0, 0, 0, 0);
+			}
+		}
+
+		.car {
+			position: relative;
+			z-index: 1;
+			transform-origin: bottom bottom;
+			animation: drift 3.2s linear infinite;
+
+			&::before,
+			&::after {
+				content: '';
+				position: absolute;
+				top: 10px;
+				border-radius: 50%;
+			}
+
+			&::before {
+				background: #eee;
+				animation: smoke .5s linear infinite;
+			}
+
+			&::after {
+				background: #eee;
+				animation: smoke .5s linear .7s infinite;
+			}
+		}
+
+		svg {
+			position: relative;
+			width: 150px;
+			padding: 0 0 150px;
+			z-index: 1;
+		}
+
+		@keyframes smoke {
+			from {
+				left: 65px;
+				width: 0px;
+				height: 0px;
+				opacity: 1;
+			}
+
+			to {
+				left: -10px;
+				width: 40px;
+				height: 40px;
+				opacity: 0;
+			}
+		}
+
+		@keyframes drift {
+			from {
+				transform: rotate(0deg);
+			}
+
+			to {
+				transform: rotate(360deg);
+			}
+		}
+
+		@keyframes tracks {
+			from {
+				border-color: rgba(0, 0, 0, 0);
+			}
+
+			to {
+				border-color: rgba(0, 0, 0, 1);
+			}
+		}
+
+		/* Reglas generales */
+		body {
+			font-family: 'Open Sans', sans-serif;
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		img {
+			max-width: 100%;
+			height: auto;
+		}
+
+		/* Formularios adaptables */
+		.form-control {
+			width: 100%;
+			padding: 10px;
+			font-size: 16px;
+		}
+
+		.form-control-modal {
+			width: 100%;
+			padding: 2px;
+			font-size: 16px;
+		}
+
+		.form-holder {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+			margin-bottom: 15px;
+		}
+
+		.form-holder-modal {
+			display: flex;
+			flex-wrap: nowrap;
+			justify-content: space-between;
+			margin-bottom: 1px;
+		}
+
+		/* Botones visibles */
+		button,
+		.btn {
+			padding: 12px 20px;
+			font-size: 16px;
+			width: 100%;
+			margin-top: 10px;
+			background-color: #3498db;
+			color: white;
+			border: none;
+			border-radius: 6px;
+		}
+
+		button:hover {
+			background-color: #2980b9;
+		}
+
+		/* Responsividad: Teléfonos */
+		@media (max-width: 600px) {
+
+			.form-holder {
+				flex-direction: column;
+			}
+
+			.title {
+				font-size: 18px;
+				text-align: center;
+			}
+
+			#fotoFinal img {
+				width: 100%;
+				height: auto;
+			}
+
+			canvas {
+				width: 100% !important;
+				height: auto !important;
+			}
+
+			#video {
+				width: 100% !important;
+				height: auto !important;
+			}
+		}
+
+
+		/* Fondo del modal */
+		.modal {
+			display: none;
+			position: fixed;
+			z-index: 9999;
+			left: 0;
+			top: 0%;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, 0.6);
+			justify-content: center;
+			align-items: center;
+			animation-duration: 0.3s;
+			animation-fill-mode: forwards;
+		}
+
+		/* Contenido del modal */
+		.modal-contenido {
+			background-color: #525575;
+			color: #fff;
+			padding: 1px;
+			border-radius: 10px;
+			width: 400px;
+			max-width: 80%;
+			/* height: 60%; */
+			text-align: center;
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+			transform: scale(0.8);
+			opacity: 0;
+			animation: scaleIn 0.3s forwards;
+		}
+
+		/* Botón cerrar */
+		.cerrar {
+			color: #fff;
+			float: right;
+			font-size: 24px;
+			font-weight: bold;
+			cursor: pointer;
+		}
+
+		.cerrar:hover {
+			color: #55e8d5;
+		}
+
+		/* Animaciones */
+		@keyframes fadeIn {
+			from {
+				opacity: 0;
+			}
+
+			to {
+				opacity: 1;
+			}
+		}
+
+		@keyframes fadeOut {
+			from {
+				opacity: 1;
+			}
+
+			to {
+				opacity: 0;
+			}
+		}
+
+		@keyframes scaleIn {
+			from {
+				transform: scale(0.8);
+				opacity: 0;
+			}
+
+			to {
+				transform: scale(1);
+				opacity: 1;
+			}
+		}
+	</style>
+
+</head>
+
+<body>
+
+	<!-- loader -->
+	<div id="loader" class="loader" style="background-image: url('./images/fondo.png');background-size: contain; /* Ajusta para que cubra todo */
+    background-position: center;
+    background-repeat: no-repeat;">
+		<div class="car">
+			<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1"
+				x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+				<g>
+					<path style="fill:#E38100;"
+						d="M326.62,370.719l77.178-30.896c6.691-2.675,11.087-9.154,11.096-16.366V300.1l-88.274,35.31V370.719   z" />
+					<path style="fill:#E38100;"
+						d="M185.381,370.719v-35.31L97.106,300.1v23.357c0.009,7.212,4.405,13.691,11.096,16.366   L185.381,370.719z" />
+				</g>
+				<path style="fill:#FFBC05;"
+					d="M190.898,491.902l30.331,12.994c22.21,9.472,47.333,9.472,69.543,0l30.331-12.95  c34.886-14.839,56.328-50.378,53.185-88.16l-12.358-147.824l12.694-151.699c2.966-35.875-16.251-69.94-48.498-85.944l-6.965-3.469  c-39.776-19.8-86.544-19.8-126.321,0l-6.965,3.469c-32.247,16.004-51.464,50.069-48.498,85.944l12.694,151.699l-12.358,147.86  C134.605,441.577,156.038,477.072,190.898,491.902z" />
+				<path style="fill:#E38100;"
+					d="M138.33,396.23c49.672,65.508,133.921,94.63,213.439,73.771  c-8.518,9.428-18.979,16.905-30.667,21.901l-30.331,12.994c-22.21,9.472-47.333,9.472-69.543,0l-30.331-12.95  c-34.886-14.839-56.328-50.378-53.185-88.16L138.33,396.23z" />
+				<path style="fill:#23AEC8;"
+					d="M324.36,368.795l2.26-1.474c5.455-3.619,8.457-9.957,7.803-16.472l-7.803-77.337H185.381  l-7.768,77.337c-0.662,6.506,2.33,12.844,7.768,16.472l2.225,1.474C229.032,396.319,282.924,396.319,324.36,368.795z" />
+				<path style="fill:#1967A3;"
+					d="M323.027,369.607c-41.277,26.668-94.436,26.35-135.386-0.812l-2.26-1.474  c-5.455-3.619-8.457-9.957-7.803-16.472l5.941-59.144C217.389,335.674,267.82,363.834,323.027,369.607z" />
+				<path style="fill:#23AEC8;"
+					d="M326.62,150.033H185.381l-6.779-40.677c-1.227-7.362,2.304-14.707,8.827-18.335l17.116-9.507  c31.991-17.778,70.902-17.778,102.893,0l17.116,9.507c6.523,3.628,10.054,10.972,8.827,18.335L326.62,150.033z" />
+				<path style="fill:#1967A3;"
+					d="M187.437,91.022l8.624-4.793c34.692,30.605,76.19,52.479,121.042,63.805H185.381l-6.779-40.677  C177.365,101.994,180.905,94.65,187.437,91.022z" />
+				<g>
+
+					<rect x="285.98" y="423.671" transform="matrix(-0.5547 0.8321 -0.8321 -0.5547 853.9575 407.9586)"
+						style="fill:#fffb00;" width="63.657" height="17.656" />
+
+					<rect x="185.38" y="400.698" transform="matrix(-0.8321 0.5547 -0.5547 -0.8321 595.7145 684.6945)"
+						style="fill:#fffb00;" width="17.656" height="63.657" />
+				</g>
+				<g>
+				</g>
+				<g>
+				</g>
+				<g>
+				</g>
+				<g>
+				</g>
+				<g>
+				</g>
+				<g>
+				</g>
+				<g>
+				</g>
+				<g>
+				</g>
+				<g>
+				</g>
+				<g>
+				</g>
+				<g>
+				</g>
+				<g>
+				</g>
+				<g>
+				</g>
+				<g>
+				</g>
+				<g>
+				</g>
+			</svg>
+		</div>
+	</div>
+
+
+	<!-- wizard -->
+	<div class="page-content" id="wizard" style="display: none;">
+		<!-- <div class="wizard-heading">Wizard ingreso</div> -->
+		<div class="wizard-v6-content">
+			<div class="wizard-form">
+				<form class="form-register" id="form-register" action="#" method="post" autocomplete="off">
+					<div id="form-total">
+						<!-- SECTION 0 -->
+						<h2>
+							<p class="step-icon">1</p>
+							<!-- <span class="step-text"></span> -->
+						</h2>
+						<section>
+							<div class="inner">
+								<div class="form-heading">
+									<h3>CONDICIONES DE LA INSPECCIÓN</h3>
+									<span>1/7</span>
+								</div>
+								<p id="contrato" style="color: #fff;">
+
+								</p>
+							</div>
+						</section>
+
+						<!-- SECTION 1 -->
+						<h2>
+							<p class="step-icon">2</p>
+							<span class="step-text"></span>
+						</h2>
+						<section>
+							<div class="inner">
+								<!-- persona linea 1 -->
+								<div class="form-heading">
+									<h3>PROPIETARIO, TENEDOR O POSEEDOR DEL VEHÍCULO</h3>
+									<span>2/7</span>
+								</div>
+
+								<div class="form-row">
+									<!-- <div class="form-row"> -->
+
+									<div class="form-holder" id="tpdocumento-div">
+										<label for="tpdocumento" class="special-label-1">Tipo de documento</label>
+										<select name="tpdocumento" id="tpdocumento" class="form-control required">
+											<option value="1">Cédula Ciudadanía</option>
+											<option value="2">NIT</option>
+										</select>
+										<span class="select-btn">
+											<i class="zmdi zmdi-chevron-down"></i>
+										</span>
+									</div>
+									<!-- </div> -->
+									<div class="form-holder" id="documento-div">
+										<label class="form-row-inner">
+											<input autocomplete="off" type="text" class="form-control" id="documento"
+												name="documento" required>
+											<span class="label">N° Documento</span>
+										</label>
+									</div>
+									<div class="form-holder">
+										<label class="form-row-inner">
+											<input autocomplete="off" type="text" class="form-control" id="nombre"
+												name="nombre" required>
+											<span class="label">Nombre o Razon social</span>
+										</label>
+									</div>
+
+								</div>
+								<!-- persona linea 2 -->
+								<div class="form-row">
+									<div class="form-holder">
+										<label class="form-row-inner">
+											<input autocomplete="off" type="number" class="form-control" id="telefono"
+												name="telefono" required>
+											<span class="label">Telefono</span>
+										</label>
+									</div>
+
+									<div class="form-holder">
+										<label class="form-row-inner">
+											<input autocomplete="off" type="text" class="form-control" list="listaPais"
+												id="paispersona" name="paispersona" required>
+											<span class="label">País</span>
+											<datalist id="listaPais">
+												<option value="COLOMBIA">
+												<option value="VENEZUELA">
+												<option value="BRASIL">
+												<option value="PERU">
+												<option value="ECUADOR">
+											</datalist>
+										</label>
+									</div>
+
+									<div class="form-holder">
+										<label class="form-row-inner">
+											<input autocomplete="off" type="text" list="departamentos"
+												class="form-control" id="deptoPropietario" name="deptoPropietario"
+												required>
+											<span class="label">Departamento</span>
+											<datalist id="departamentos">
+												<option value="Amazonas">
+												<option value="Antioquia">
+												<option value="Arauca">
+												<option value="Atlántico">
+												<option value="Bolívar">
+												<option value="Boyacá">
+												<option value="Caldas">
+												<option value="Caquetá">
+												<option value="Casanare">
+												<option value="Cauca">
+												<option value="Cesar">
+												<option value="Chocó">
+												<option value="Córdoba">
+												<option value="Cundinamarca">
+												<option value="Guainía">
+												<option value="Guaviare">
+												<option value="Huila">
+												<option value="La Guajira">
+												<option value="Magdalena">
+												<option value="Meta">
+												<option value="Nariño">
+												<option value="Norte de Santander">
+												<option value="Putumayo">
+												<option value="Quindío">
+												<option value="Risaralda">
+												<option value="San Andrés y Providencia">
+												<option value="Santander">
+												<option value="Sucre">
+												<option value="Tolima">
+												<option value="Valle del Cauca">
+												<option value="Vaupés">
+												<option value="Vichada">
+											</datalist>
+										</label>
+									</div>
+
+								</div>
+
+								<div class="form-row">
+									<div class="form-holder">
+										<label class="form-row-inner">
+											<input autocomplete="off" type="text" list="ciudades" class="form-control"
+												id="ciudadProp" name="ciudadProp" required>
+											<span class="label">Ciudad</span>
+											<datalist id="ciudades">
+												<option value="Bogota"></option>
+												<option value="Cali"></option>
+												<option value="Medellin"></option>
+												<option value="Ibague"></option>
+											</datalist>
+										</label>
+									</div>
+
+									<div class="form-holder">
+										<label class="form-row-inner">
+											<input autocomplete="off" type="text" class="form-control" id="direccion"
+												name="direccion" required>
+											<span class="label">Direccion</span>
+										</label>
+									</div>
+
+									<div class="form-holder">
+										<label class="form-row-inner">
+											<input autocomplete="off" type="email" name="correo" id="correo"
+												class="form-control" required>
+											<span class="label">E-Mail</span>
+										</label>
+									</div>
+
+								</div>
+							</div>
+						</section>
+
+						<!-- SECTION 2 -->
+						<h2>
+							<p class="step-icon">3</p>
+							<span class="step-text"></span>
+						</h2>
+						<section>
+
+							<div class="inner">
+								<div class="form-heading">
+									<h3>Datos Del vehículo</h3>
+									<span>3/7</span>
+								</div>
+
+								<div class="form-row">
+									<div class="form-holder">
+										<label class="form-row-inner">
+											<input autocomplete="off" type="text" class="form-control" id="placa"
+												name="placa" required>
+											<span class="label">Placa</span>
+										</label>
+									</div>
+									<div class="form-holder">
+										<label class="form-row-inner">
+											<input autocomplete="off" type="text" class="form-control" id="vin"
+												name="vin" required>
+											<span class="label">VIN</span>
+										</label>
+									</div>
+								</div>
+
+								<div class="form-row">
+
+									<div class="form-holder">
+										<label class="form-row-inner">
+											<input autocomplete="off" type="text" class="form-control" list="listaPais"
+												id="paisvehicl" name="paisvehicl" required>
+											<span class="label">País</span>
+										</label>
+									</div>
+
+									<div class="form-holder">
+										<label class="form-row-inner">
+											<input autocomplete="off" type="text" class="form-control"
+												list="listaservicio" id="servicioveh" name="servicioveh" required>
+											<span class="label">Servicio</span>
+											<datalist id="listaservicio">
+												<option value="PARTICULAR">PARTICULAR</option>
+											</datalist>
+										</label>
+									</div>
+
+									<div class="form-holder">
+										<label class="form-row-inner">
+											<input autocomplete="off" type="text" class="form-control" list="listamarca"
+												id="marca" name="marca" required>
+											<span class="label">Marca</span>
+											<datalist id="listamarca">
+												<option value="YAMAHA"></option>
+											</datalist>
+										</label>
+									</div>
+
+								</div>
+
+								<div class="form-row">
+
+									<div class="form-holder">
+										<label class="form-row-inner">
+											<input autocomplete="off" type="text" class="form-control" list="listalinea"
+												id="linea" name="linea" required>
+											<span class="label">Linea</span>
+											<datalist id="listalinea">
+												<option value="SZ16R"></option>
+											</datalist>
+										</label>
+									</div>
+
+									<div class="form-holder">
+										<label class="form-row-inner">
+											<input autocomplete="off" type="number" class="form-control" id="modelo"
+												name="modelo" required>
+											<span class="label">Modelo</span>
+										</label>
+									</div>
+
+									<div class="form-holder">
+										<label class="form-row-inner">
+											<input autocomplete="off" type="number" class="form-control" id="nolicencia"
+												name="nolicencia" required>
+											<span class="label">N° licencia</span>
+										</label>
+									</div>
+								</div>
+
+								<div class="form-row">
+									<div class="form-holder">
+										<label for="day" class="special-label-1">Fecha de matricula</label>
+										<input autocomplete="off" type="date" name="fechamatricula" class="form-control"
+											id="fechamatricula" placeholder="15 / 08 / 2018">
+									</div>
+									<div class="form-holder">
+										<label class="form-row-inner">
+											<input autocomplete="off" type="text" class="form-control"
+												list="listacolores" id="color" name="color" required>
+											<span class="label">Color</span>
+											<datalist id="listacolores">
+												<option value="NEGRO GRIS"></option>
+											</datalist>
+										</label>
+									</div>
+									<div class="form-holder">
+										<label class="form-row-inner">
+											<input autocomplete="off" type="text" class="form-control"
+												list="listacombustible" id="combustible" name="combustible" required>
+											<span class="label">Combustible</span>
+											<datalist id="listacombustible">
+												<option value="GASOLINA"></option>
+												<option value="DIESEL"></option>
+												<option value="GAS-GASOLINA"></option>
+											</datalist>
+										</label>
+									</div>
+
+								</div>
+							</div>
+						</section>
+
+						<!-- SECTION 3 -->
+						<h2>
+							<p class="step-icon">4</p>
+							<span class="step-text"></span>
+						</h2>
+						<section>
+
+							<div class="inner">
+								<div class="form-heading">
+									<h3>Datos Del vehículo 2</h3>
+									<span>5/7</span>
+								</div>
+								<div class="form-row">
+									<div class="form-holder">
+										<label class="form-row-inner">
+											<input autocomplete="off" type="text" class="form-control" id="nomotor"
+												name="nomotor" required>
+											<span class="label">N° Motor</span>
+										</label>
+									</div>
+
+									<div class="form-holder">
+										<label class="form-row-inner">
+											<input autocomplete="off" type="text" class="form-control"
+												list="listatpmotor" id="tpmotor" name="tpmotor" required>
+											<span class="label">Tipo de Motor</span>
+											<datalist id="listatpmotor">
+												<option value="otto"></option>
+												<option value="diesel"></option>
+											</datalist>
+										</label>
+									</div>
+
+									<div class="form-holder">
+										<label class="form-row-inner">
+											<input autocomplete="off" type="number" class="form-control" id="cilindraje"
+												name="cilindraje" required>
+											<span class="label">Cilindraje</span>
+										</label>
+									</div>
+
+
+								</div>
+								<div class="form-row">
+
+									<div class="form-holder">
+										<label class="form-row-inner">
+											<input autocomplete="off" type="number" class="form-control" id="kms"
+												name="kms" required>
+											<span class="label">Kilometraje</span>
+										</label>
+									</div>
+
+									<div class="form-holder">
+										<label class="form-row-inner">
+											<input autocomplete="off" type="number" class="form-control"
+												id="nopasajeros" name="nopasajeros" required>
+											<span class="label">N° pasajeros</span>
+										</label>
+									</div>
+
+									<div class="form-holder">
+										<label class="custom-checkbox">
+											<input autocomplete="off" type="checkbox" id="blindado">
+											<span class="checkmark"></span>
+											Blindado
+										</label>
+									</div>
+
+									<div class="form-holder">
+										<label class="custom-checkbox">
+											<input autocomplete="off" type="checkbox" id="ense">
+											<span class="checkmark"></span>
+											ENSEÑANZA
+										</label>
+									</div>
+								</div>
+
+								<div class="form-row">
+
+									<div class="form-holder">
+										<label class="form-row-inner">
+											<input autocomplete="off" type="number" class="form-control" id="potencia"
+												name="potencia" required>
+											<span class="label">Potencia</span>
+										</label>
+									</div>
+
+									<div class="form-holder">
+										<label class="form-row-inner">
+											<input autocomplete="off" type="text" list="lstcarroceria"
+												class="form-control" id="carroceria" name="carroceria" required>
+											<span class="label">Carrocería</span>
+											<datalist id="lstcarroceria">
+												<option value="SPORT"></option>
+												<option value="SEDAN"></option>
+											</datalist>
+										</label>
+									</div>
+
+									<!-- <div class="form-holder">
+										<label class="form-row-inner">
+											<input autocomplete="off"  type="text" class="form-control" list="carrocerialst" id="carroceria" name="carroceria"
+												required>
+												<datalist id="carrocerialst">
+													<option value="SEDAN"></option>
+													<option value="SPORT"></option>
+													<option value="ESTACAS"></option>
+													<option value="SIN Carrocería"></option>
+												</datalist>
+											<span class="label">Carrocería</span>
+										</label>
+									</div> -->
+
+
+									<div class="form-holder">
+										<label for="fechasoat" class="special-label-1">Vencimiento SOAT</label>
+										<input autocomplete="off" type="date" name="fechasoat" class="form-control"
+											id="fechasoat" placeholder="15 / 08 / 2018">
+									</div>
+
+									<div class="form-holder">
+										<label for="btnAddLabs" class="special-label-1">Labrados</label>
+										<button id="btnAddLabs" type="button" onclick="abrirModal()"
+											class="ui-button ui-widget ui-corner-all frm-btn">Agregar Labrados</button>
+									</div>
+
+								</div>
+
+								<div class="form-row">
+									<div class="form-holder">
+										<label for="gnv" class="special-label-1">CONVERSION GNV</label>
+										<select name="gnv" id="gnv" class="form-control">
+											<option value="SI">SI</option>
+											<option value="NO">NO</option>
+											<option value="N/A" selected>N/A</option>
+										</select>
+										<span class="select-btn">
+											<i class="zmdi zmdi-chevron-down"></i>
+										</span>
+									</div>
+
+									<div class="form-holder">
+										<label for="fechagnv" class="special-label-1">Vencimiento GNV</label>
+										<input autocomplete="off" type="date" name="fechagnv" class="form-control"
+											id="fechagnv" placeholder="15 / 08 / 2018">
+									</div>
+
+									<div class="form-holder">
+										<label for="vez" class="special-label-1">VEZ</label>
+										<select name="vez" id="vez" class="form-control">
+											<option value="1">1 RA</option>
+											<option value="2">2 DA</option>
+										</select>
+										<span class="select-btn">
+											<i class="zmdi zmdi-chevron-down"></i>
+										</span>
+									</div>
+
+								</div>
+							</div>
+						</section>
+
+						<!-- SECTION 4-->
+						<h2>
+							<p class="step-icon">5</p>
+							<span class="step-text"></span>
+						</h2>
+						<section>
+							<div class="inner">
+								<div class="form-heading">
+									<h3>Datos Del vehículo 3</h3>
+									<span>5/7</span>
+								</div>
+								<div class="form-row">
+									<div class="form-holder" id="criterio">
+
+
+									</div>
+								</div>
+							</div>
+						</section>
+
+						<!-- SECTION 5 -->
+						<h2>
+							<p class="step-icon">6</p>
+							<span class="step-text"></span>
+						</h2>
+						<section>
+
+							<div class="inner">
+
+								<div class="form-heading">
+									<h3>Observaciones</h3>
+									<span>6/7</span>
+								</div>
+								<div class="form-holder">
+									<textarea name="" id="observaciones" cols="50" rows="10"></textarea>
+								</div>
+
+								<div class="form-heading">
+									<h3>Evidencias Fotograficas</h3>
+								</div>
+
+								<div class="form-holder">
+									<select id="optselectorCamara">
+										<option value="user">Cámara Frontal</option>
+										<option value="environment" selected>Cámara Trasera</option>
+									</select>
+									<button id="btniniciar" type="button"
+										class="ui-button ui-widget ui-corner-all frm-btn">Iniciar Cámara</button>
+									<button id="btncapturar" type="button"
+										class="ui-button ui-widget ui-corner-all frm-btn">📷 Capturar Imagen
+										Técnica</button>
+									<br><br>
+
+									<video id="video" autoplay playsinline></video>
+									<br>
+
+									<br>
+									<canvas id="canvas" style="display:none;"></canvas>
+									<br>
+									<h3>Resultado:</h3>
+									<div class="form-holder" id="fotoFinal">
+
+									</div>
+
+								</div>
+
+							</div>
+
+						</section>
+
+						<!-- SECTION 6 -->
+						<h2>
+							<p class="step-icon">7</p>
+							<span class="step-text"></span>
+						</h2>
+						<section id="firmasection">
+
+							<div class="inner">
+								<div class="form-heading">
+									<h3>Firma de aceptación</h3>
+									<span>6/7</span>
+								</div>
+
+								<div class="form-row">
+									<div class="form-holder">
+										<canvas id="signature-pad"></canvas>
+									</div>
+								</div>
+
+								<div class="form-row">
+									<div id="buttons" class="form-holder">
+										<button class="ui-button ui-widget ui-corner-all frm-btn" id="clear"
+											style="background-color: #43ccba; color: #fff; border: none;">Limpiar</button>
+									</div>
+								</div>
+
+							</div>
+
+						</section>
+
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Modal -->
+	<div id="miModal" class="modal">
+		<div class="modal-contenido">
+			<span class="cerrar">&times;</span>
+			<h3>presiones</h3>
+			<!-- eje1 -->
+			<div class="" style="display: flex; width: 100%; padding: 5px 10px 0px 10px;">
+
+				<!-- eje delantero -->
+				<div class="" style="width: 50%; padding: 5px 10px 0px 10px;">
+					<label class="">
+						<input style="width: 100%;" autocomplete="off" type="number" class="" id="eje1i" name="eje1i"
+							required>
+						<span class="">Izquierda</span>
+					</label>
+				</div>
+
+				<div class="" style="width: 50%; padding: 5px 10px 0px 10px;">
+					<label class="">
+						<input style="width: 100%;" autocomplete="off" type="number" class="" id="eje1d" name="eje1d"
+							required>
+						<span class="">Derecha</span>
+					</label>
+				</div>
+			</div>
+
+			<!-- eje2 -->
+			<div class="" style="display: flex; width: 100%; padding: 5px 10px 0px 10px;gap: 10px;">
+				<!-- eje delantero -->
+				<div class="" style="width: 25%;">
+					<label class="" style="width: 100%;">
+						<input style="width: 100%;" autocomplete="off" type="number" class="" id="eje2i1" name="eje2i1"
+							required>
+
+						<span class="">Exterior</span>
+
+					</label>
+				</div>
+
+				<div class="" style="width: 25%;">
+					<label class="" style="width: 100%;">
+						<input style="width: 100%;" autocomplete="off" type="number" class="" id="eje2i2" name="eje2i2"
+							required>
+						<span class="">Interior</span>
+					</label>
+				</div>
+
+				<div class="" style="width: 25%;">
+					<label class="" style="width: 100%;">
+						<input style="width: 100%;" autocomplete="off" type="number" class="" id="eje2d1" name="eje2d1"
+							required>
+						<span class="">Interior</span>
+					</label>
+				</div>
+
+				<div class="" style="width: 25%;">
+					<label class="" style="width: 100%;">
+						<input style="width: 100%;" autocomplete="off" type="number" class="" id="eje2d2" name="eje2d2"
+							required>
+						<span class="">Exterior</span>
+					</label>
+				</div>
+
+
+
+			</div>
+
+			<!-- eje3 -->
+			<div class="" style="display: flex; width: 100%; padding: 5px 10px 0px 10px;gap: 10px;">
+				<!-- eje delantero -->
+				<div class="" style="width: 25%;">
+					<label class="" style="width: 100%;">
+						<input style="width: 100%;" autocomplete="off" type="number" class="" id="eje3i1" name="eje3i1"
+							required>
+
+						<span class="">Exterior</span>
+
+					</label>
+				</div>
+
+				<div class="" style="width: 25%;">
+					<label class="" style="width: 100%;">
+						<input style="width: 100%;" autocomplete="off" type="number" class="" id="eje3i2" name="eje3i2"
+							required>
+						<span class="">Interior</span>
+					</label>
+				</div>
+
+				<div class="" style="width: 25%;">
+					<label class="" style="width: 100%;">
+						<input style="width: 100%;" autocomplete="off" type="number" class="" id="eje3d1" name="eje3d1"
+							required>
+						<span class="">Interior</span>
+					</label>
+				</div>
+
+				<div class="" style="width: 25%;">
+					<label class="" style="width: 100%;">
+						<input style="width: 100%;" autocomplete="off" type="number" class="" id="eje3d2" name="eje3d2"
+							required>
+						<span class="">Exterior</span>
+					</label>
+				</div>
+
+
+
+			</div>
+
+			<!-- eje4 -->
+			<div class="" style="display: flex; width: 100%; padding: 5px 10px 0px 10px;gap: 10px;">
+				<!-- eje delantero -->
+				<div class="" style="width: 25%;">
+					<label class="" style="width: 100%;">
+						<input style="width: 100%;" autocomplete="off" type="number" class="" id="eje4i1" name="eje4i14"
+							required>
+
+						<span class="">Exterior</span>
+
+					</label>
+				</div>
+
+				<div class="" style="width: 25%;">
+					<label class="" style="width: 100%;">
+						<input style="width: 100%;" autocomplete="off" type="number" class="" id="eje4i2" name="eje4i2"
+							required>
+						<span class="">Interior</span>
+					</label>
+				</div>
+
+				<div class="" style="width: 25%;">
+					<label class="" style="width: 100%;">
+						<input style="width: 100%;" autocomplete="off" type="number" class="" id="eje4d1" name="eje4d1"
+							required>
+						<span class="">Interior</span>
+					</label>
+				</div>
+
+				<div class="" style="width: 25%;">
+					<label class="" style="width: 100%;">
+						<input style="width: 100%;" autocomplete="off" type="number" class="" id="eje4d2" name="eje4d2"
+							required>
+						<span class="">Exterior</span>
+					</label>
+				</div>
+			</div>
+
+			<!-- eje5 -->
+			<div class="" style="display: flex; width: 100%; padding: 5px 10px 0px 10px;gap: 10px;">
+				<!-- eje delantero -->
+				<div class="" style="width: 25%;">
+					<label class="" style="width: 100%;">
+						<input style="width: 100%;" autocomplete="off" type="number" class="" id="eje5i1" name="eje5i14"
+							required>
+
+						<span class="">Exterior</span>
+
+					</label>
+				</div>
+
+				<div class="" style="width: 25%;">
+					<label class="" style="width: 100%;">
+						<input style="width: 100%;" autocomplete="off" type="number" class="" id="eje5i2" name="eje5i2"
+							required>
+						<span class="">Interior</span>
+					</label>
+				</div>
+
+				<div class="" style="width: 25%;">
+					<label class="" style="width: 100%;">
+						<input style="width: 100%;" autocomplete="off" type="number" class="" id="eje5d1" name="eje5d1"
+							required>
+						<span class="">Interior</span>
+					</label>
+				</div>
+
+				<div class="" style="width: 25%;">
+					<label class="" style="width: 100%;">
+						<input style="width: 100%;" autocomplete="off" type="number" class="" id="eje5d2" name="eje5d2"
+							required>
+						<span class="">Exterior</span>
+					</label>
+				</div>
+			</div>
+
+			<!-- repuesto -->
+			<div class="" style="display: flex; width: 100%; padding: 5px 10px 0px 10px;">
+
+				<!-- repuestos -->
+				<div class="" style="width: 50%; padding: 5px 10px 0px 10px;">
+					<label class="">
+						<input style="width: 100%;" autocomplete="off" type="number" class="" id="repI" name="repI"
+							required>
+						<span class="">Izquierda</span>
+					</label>
+				</div>
+
+				<div class="" style="width: 50%; padding: 5px 10px 0px 10px;">
+					<label class="">
+						<input style="width: 100%;" autocomplete="off" type="number" class="" id="repD" name="repD"
+							required>
+						<span class="">Derecha</span>
+					</label>
+				</div>
+			</div>
+
+			<div class="form-row">
+				<button id="btnModalAceptar">Aceptar</button>
+			</div>
+
+		</div>
+
+	</div>
+
+
+	</div>
+
+
+	<script src="js/jspdf.js"></script>
+	<script src="js/sweetalert2@11.js"></script>
+
+	<script src="js/jquery-3.3.1.min.js"></script>
+	<script src="js/jquery.validate.min.js"></script>
+	<script src="js/jquery.steps.js"></script>
+	<script src="js/jquery-ui.min.js"></script>
+	<script src="js/signature_pad.umd.min.js"></script>
+	<script src="js/main.js"></script>
+	<script src="js/funciones.js"></script>
+	<script>
+
+		function abrirModal() {
+			const modal = document.getElementById("miModal");
+			modal.style.display = "flex";
+			modal.style.animation = "fadeIn 0.8s forwards";
+
+			const contenido = modal.querySelector(".modal-contenido");
+			contenido.style.animation = "scaleIn 0.8s forwards";
+		}
+
+		function cerrarModal() {
+			const modal = document.getElementById("miModal");
+			modal.style.animation = "fadeOut 0.8s forwards";
+
+			setTimeout(() => {
+				modal.style.display = "none";
+			}, 300);
+		}
+
+		// Eventos
+		document.querySelector(".cerrar").addEventListener("click", cerrarModal);
+		document.getElementById("btnModalAceptar").addEventListener("click", cerrarModal);
+
+		// Cerrar al hacer clic fuera
+		window.onclick = function (e) {
+			const modal = document.getElementById("miModal");
+			if (e.target === modal) {
+				cerrarModal();
+			}
+		}
+
+		$(document).ready(function () {
+			$('#loader').css("display", "flex");
+			//$("#loader").show();
+
+			setTimeout(() => {
+				$('#loader').css("display", "none");
+				$('#wizard').css("display", "flex");
+			}, 4000);
+
+		});
+	</script>
+
+
+</body>
+
+</html>
