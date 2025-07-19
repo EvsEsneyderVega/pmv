@@ -37,37 +37,31 @@ const crearpass = (pass)=>{
 
 app.get('/',(req,res)=>{
     
-    res.sendFile(path.join(__dirname,'views','login.html'));
+    res.sendFile(path.join(__dirname,'views','ingreso.html'));
     //crearpass("algo");
 });
 
 // Vista para usuario Ingreso (nivel 1)
-//app.get('/vista/ingreso', verificarToken, (req, res) => {
-
-app.get('/vista/ingreso', (req, res) => {
-    // if (req.usuario.nivel != 1) {
-    //     return res.status(403).send('Acceso denegado');
-    // }
+app.get('/vista/ingreso', verificarToken, (req, res) => {
+    if (req.usuario.nivel != 1) {
+        return res.status(403).send('Acceso denegado');
+    }
     res.sendFile(path.join(__dirname, 'views', 'ingreso.html'));
 });
 
 // Vista para Calidad (nivel 2)
-//app.get('/vista/calidad', verificarToken, (req, res) => {
-
-app.get('/vista/calidad', (req, res) => {
-    // if (req.usuario.nivel != 2) {
-    //     return res.status(403).send('Acceso denegado');
-    // }
+app.get('/vista/calidad', verificarToken, (req, res) => {
+    if (req.usuario.nivel != 2) {
+        return res.status(403).send('Acceso denegado');
+    }
     res.sendFile(path.join(__dirname, 'views', 'calidad.html'));
 });
 
 // Vista para Admin (nivel 3)
-//app.get('/vista/admin', verificarToken, (req, res) => {
-
-app.get('/vista/admin', (req, res) => {
-    // if (req.usuario.nivel != 3) {
-    //     return res.status(403).send('Acceso denegado');
-    // }
+app.get('/vista/admin', verificarToken, (req, res) => {
+    if (req.usuario.nivel != 3) {
+        return res.status(403).send('Acceso denegado');
+    }
     res.sendFile(path.join(__dirname, 'views', 'admin.html'));
 });
 
