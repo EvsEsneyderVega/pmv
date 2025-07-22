@@ -1,5 +1,8 @@
 const { jsPDF } = window.jspdf;
-
+const imgPath = path.resolve(__dirname,'../images/logo_01.png');
+const imageData = fs.readFileSync(imgPath).toString('base64');
+const imgBase64 = `data:image/png;base64,${imageData}`;
+console.log(imgBase64);
 // objeto de datos
 const data = {
     encabezado: {
@@ -9,17 +12,17 @@ const data = {
         dircda: 'calle 1 No 123-123',
         ciudadcda: 'Bogotá',
         deptocda: 'Cundinamarca',
-        logocda: ''
+        logocda: imgBase64
 
     },
     formato: {
         fecha: '2025-06-22',
         version: '2',
         codigo: 'GT-F-01',
-        numero: 12345,
         vez: '1'
     },
     vehiculo: {
+        numero: 12345,
         fecha: '2025-06-22 07:05:02',
         placa: 'ABC123',
         pais: 'COLOMBIA',
@@ -216,7 +219,7 @@ function genPDF(data) {
     doc.rect(160, 3, 45, 8);
 
 
-    doc.text(`N°:` + data.formato.numero.toString(), 141, 19);
+    doc.text(`N°:` + data.vehiculo.numero.toString(), 141, 19);
     doc.rect(140, 14, 65, 8); // Rectángulo para número
 
     // Logo y datos del CDA

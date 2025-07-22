@@ -821,9 +821,9 @@
 									</div>
 
 									<div class="form-holder">
-										<label for="btnAddLabs" class="special-label-1">Labrados</label>
+										<label for="btnAddLabs" class="special-label-1">Presiones</label>
 										<button id="btnAddLabs" type="button" onclick="abrirModal()"
-											class="ui-button ui-widget ui-corner-all frm-btn">Agregar Labrados</button>
+											class="ui-button ui-widget ui-corner-all frm-btn">Agregar Presiones</button>
 									</div>
 
 								</div>
@@ -1272,7 +1272,9 @@
 					document.getElementById('carroceria').value = data.getInfoVehiculoResult.vehRespuesta.TipoCarroceria?data.getInfoVehiculoResult.vehRespuesta.TipoCarroceria:'';
 
 					document.getElementById('cilindraje').value = data.getInfoVehiculoResult.vehRespuesta.Cilindraje?data.getInfoVehiculoResult.vehRespuesta.Cilindraje:'';
-					document.getElementById('fechasoat').value = data.getInfoVehiculoResult.vehRespuesta.FechaSoat?data.getInfoVehiculoResult.vehRespuesta.FechaSoat:'';
+					document.getElementById('fechasoat').value = data.getInfoVehiculoResult.vehRespuesta.FechaSoat?data.getInfoVehiculoResult.vehRespuesta.FechaSoat.split('T')[0]:'';
+
+
 
 					const blindadaje = data.getInfoVehiculoResult.vehRespuesta.Blindado?data.getInfoVehiculoResult.vehRespuesta.Blindado:'';
 
