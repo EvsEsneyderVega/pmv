@@ -1237,9 +1237,59 @@
 				$('#wizard').css("display", "flex");
 			}, 4000);
 
+					document.getElementById('placa').addEventListener('blur', async () => {
+			
+			const placa = document.getElementById('placa').value;
+			
+			const respuesta = await fetch('/api/vehiculo/consultar-vehiculo', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': localStorage.getItem('token') // si usas JWT
+				},
+				body: JSON.stringify({ placa })
+			});
+			
+			const data = await respuesta.json();
+			console.log(data?.getInfoVehiculoResult)
+			console.log(data?.codRespuesta=="1")
+
+			if (data?.getInfoVehiculoResult) {
+				if(data?.getInfoVehiculoResult.codRespuesta=="1"){
+					
+					document.getElementById('vin').value = data.getInfoVehiculoResult.vehRespuesta.VIN?data.getInfoVehiculoResult.vehRespuesta.VIN:'';
+					document.getElementById('servicioveh').value = data.getInfoVehiculoResult.vehRespuesta.TipoServicio?data.getInfoVehiculoResult.vehRespuesta.TipoServicio:'';
+					document.getElementById('marca').value = data.getInfoVehiculoResult.vehRespuesta.Marca?data.getInfoVehiculoResult.vehRespuesta.Marca:'';
+					document.getElementById('linea').value = data.getInfoVehiculoResult.vehRespuesta.Linea?data.getInfoVehiculoResult.vehRespuesta.Linea:'';
+					document.getElementById('modelo').value = data.getInfoVehiculoResult.vehRespuesta.Modelo?data.getInfoVehiculoResult.vehRespuesta.Modelo:'';
+					document.getElementById('nolicencia').value = data.getInfoVehiculoResult.vehRespuesta.Licencia?data.getInfoVehiculoResult.vehRespuesta.Licencia:'';
+					document.getElementById('fechamatricula').value = data.getInfoVehiculoResult.vehRespuesta.FechaMatricula?data.getInfoVehiculoResult.vehRespuesta.FechaMatricula.split('T')[0]:'';
+					document.getElementById('color').value = data.getInfoVehiculoResult.vehRespuesta.Color?data.getInfoVehiculoResult.vehRespuesta.Color:'';
+					document.getElementById('combustible').value = data.getInfoVehiculoResult.vehRespuesta.Combustible?data.getInfoVehiculoResult.vehRespuesta.Combustible:'';
+
+					document.getElementById('nomotor').value = data.getInfoVehiculoResult.vehRespuesta.MotorNo?data.getInfoVehiculoResult.vehRespuesta.MotorNo:'';
+					document.getElementById('nopasajeros').value = data.getInfoVehiculoResult.vehRespuesta.CantSillas?data.getInfoVehiculoResult.vehRespuesta.CantSillas:'';
+					document.getElementById('carroceria').value = data.getInfoVehiculoResult.vehRespuesta.TipoCarroceria?data.getInfoVehiculoResult.vehRespuesta.TipoCarroceria:'';
+
+					document.getElementById('cilindraje').value = data.getInfoVehiculoResult.vehRespuesta.Cilindraje?data.getInfoVehiculoResult.vehRespuesta.Cilindraje:'';
+					document.getElementById('fechasoat').value = data.getInfoVehiculoResult.vehRespuesta.FechaSoat?data.getInfoVehiculoResult.vehRespuesta.FechaSoat:'';
+
+					const blindadaje = data.getInfoVehiculoResult.vehRespuesta.Blindado?data.getInfoVehiculoResult.vehRespuesta.Blindado:'';
+
+					if(blindadaje == '' || blindadaje == 'NO'){
+						document.getElementById('blindado').checked = false	
+					}else{
+						document.getElementById('blindado').checked = true
+					}
+					
+				
+				}
+			} 
+		});
+
+
 		});
 	</script>
-
 
 </body>
 

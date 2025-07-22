@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const app = express();
 const path = require('path');
 const verificarToken = require('./middlewares/verificarToken');
+const vehiculoRoutes = require('./routes/indra.routes');
 
 require('dotenv').config();
 
@@ -69,6 +70,12 @@ const rutasUsuario = require('./routes/usuario.routes.js');
 
 app.use('/api/usuarios',rutasUsuario);
 
+
+
+
+app.use('/api/vehiculo', vehiculoRoutes);
+
+ 
 app.use((req,res)=>{
      res.sendFile(path.join(__dirname, 'views', '404.html'));
 });

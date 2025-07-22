@@ -596,8 +596,8 @@ $(function () {
         headerTag: "h2",
         bodyTag: "section",
         transitionEffect: "fade",
-        enableAllSteps: false,
-        autoFocus: true,
+        enableAllSteps: true,
+        autoFocus: false,
         transitionEffectSpeed: 500,
         titleTemplate: '<div class="title">#title#</div>',
         labels: {

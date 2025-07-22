@@ -1,4 +1,4 @@
-const getSoapClient = require('./soapClient');
+const getSoapClient = require('./indra_soap_cient');
 
 async function getInfoVehiculo(placa, extranjero = 'N') {
   const client = await getSoapClient();
