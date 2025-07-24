@@ -23,9 +23,6 @@
 </head> <!--end::Head--> <!--begin::Body-->
 
 <body class="login-page bg-body-secondary" data-bs-theme="dark">
-  
-
-
   <div class="login-box">
     <div class="card card-outline card-primary">
       <div class="card-header"> <a href="/"
@@ -35,15 +32,16 @@
         </a> </div>
       <div class="card-body login-card-body">
         <p class="login-box-msg">Inicie sesion para acceder a la plataforma</p>
-        <form>
+        <form id="login">
           <div class="input-group mb-1">
-            <div class="form-floating"> <input id="user" type="text" class="form-control" value=""
-                placeholder=""> <label for="password">Login</label> </div>
+            <div class="form-floating"> <input id="user" type="text" class="form-control" value="" placeholder="">
+              <label for="password">Login</label> </div>
             <div class="input-group-text"> <span class="bi bi-person-fill"></span> </div>
           </div>
           <div class="input-group mb-1">
             <div class="form-floating"> <input id="loginPassword" type="password" class="form-control" placeholder="">
-              <label for="loginPassword">Password</label> </div>
+              <label for="loginPassword">Password</label>
+            </div>
             <div class="input-group-text"> <span class="bi bi-lock-fill"></span> </div>
           </div> <!--begin::Row-->
           <div class="row">
@@ -52,7 +50,7 @@
             </div> <!-- /.col -->
           </div> <!--end::Row-->
         </form>
-       </div> <!-- /.login-card-body -->
+      </div> <!-- /.login-card-body -->
     </div>
   </div> <!-- /.login-box --> <!--begin::Third Party Plugin(OverlayScrollbars)-->
   <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js"
@@ -111,7 +109,35 @@
         }
       });
     });
+
   </script> <!--end::Script-->
+  <script>
+    const formulario = document.getElementById('login');
+    formulario.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      const raw = JSON.stringify({
+        "nick_usr": document.getElementById("user").value,
+        "clav_usr": document.getElementById("loginPassword").value
+      });
+
+      const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow"
+      };
+
+      fetch("http://localhost:5000/api/usuarios/login/", requestOptions)
+        .then((response) => response.json()
+      )
+        .then((result) => console.log(result))
+        .catch((error) => console.error(error));
+
+    })
+  </script>
 </body><!--end::Body-->
 
 </html>

@@ -38,8 +38,8 @@ const crearpass = (pass)=>{
 
 app.get('/',(req,res)=>{
     
-    res.sendFile(path.join(__dirname,'views','ingreso.html'));
-    //crearpass("algo");
+    res.sendFile(path.join(__dirname,'views','login.html'));
+    //crearpass("EVSING");
 });
 
 // Vista para usuario Ingreso (nivel 1)
@@ -70,11 +70,7 @@ const rutasUsuario = require('./routes/usuario.routes.js');
 
 app.use('/api/usuarios',rutasUsuario);
 
-
-
-
-app.use('/api/vehiculo', vehiculoRoutes);
-
+app.use('/api/indra/vehiculo', vehiculoRoutes);
  
 app.use((req,res)=>{
      res.sendFile(path.join(__dirname, 'views', '404.html'));

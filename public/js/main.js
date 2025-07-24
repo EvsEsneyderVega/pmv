@@ -1,4 +1,17 @@
 const { jsPDF } = window.jspdf;
+const imgPath = '../images/logo_01.png';
+
+const leerImg = async (img) => {
+  const res = await fetch(img);
+  const blob = await res.blob();
+
+  return await new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+};
 
 // objeto de datos
 const data = {
@@ -16,10 +29,10 @@ const data = {
         fecha: '2025-06-22',
         version: '2',
         codigo: 'GT-F-01',
-        numero: 12345,
         vez: '1'
     },
     vehiculo: {
+        numero: 12345,
         fecha: '2025-06-22 07:05:02',
         placa: 'ABC123',
         pais: 'COLOMBIA',
@@ -133,6 +146,14 @@ const data = {
 
 
 };
+
+//cargar logo
+(async () => {
+  const imgBase64 = await leerImg(imgPath);
+  data.encabezado.logocda = imgBase64;
+})();
+
+
 let doc;
 
 // ============ FUNCIONES AUXILIARES ============
@@ -216,11 +237,11 @@ function genPDF(data) {
     doc.rect(160, 3, 45, 8);
 
 
-    doc.text(`N°:` + data.formato.numero.toString(), 141, 19);
+    doc.text(`N°:` + data.vehiculo.numero.toString(), 141, 19);
     doc.rect(140, 14, 65, 8); // Rectángulo para número
 
     // Logo y datos del CDA
-    doc.addImage(data.encabezado.logocda, "JPEG", 15, 28, 35, 15);
+    doc.addImage(data.encabezado.logocda,'PNG',15, 28, 35, 15);
     doc.rect(90, 23, 115, 24); // Rectángulo grande para datos CDA
 
     doc.setFontSize(11);
@@ -512,14 +533,12 @@ function genPDF(data) {
         y = 15;
         marcaDeAgua(doc);
         addSectionHeader(`6 EVIDENCIA FOTOGRAFICA`, 5, 9);
-        console.log(data.vehiculo.fotoEvidencia);
         for (let i = 0; i < data.vehiculo.fotoEvidencia.length; i++) {
 
             doc.addImage(data.vehiculo.fotoEvidencia[i], "JPEG", 15, y + 55 * i, 90, 50);
         }
 
     }
-
 
     // Guardar el documento
     doc.save("formato_ingreso_ordenado.pdf");
@@ -596,8 +615,8 @@ $(function () {
         headerTag: "h2",
         bodyTag: "section",
         transitionEffect: "fade",
-        enableAllSteps: false,
-        autoFocus: true,
+        enableAllSteps: true,
+        autoFocus: false,
         transitionEffectSpeed: 500,
         titleTemplate: '<div class="title">#title#</div>',
         labels: {

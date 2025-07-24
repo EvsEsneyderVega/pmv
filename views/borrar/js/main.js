@@ -223,7 +223,7 @@ function genPDF(data) {
     doc.rect(140, 14, 65, 8); // Rectángulo para número
 
     // Logo y datos del CDA
-    doc.addImage(data.encabezado.logocda, "JPEG", 15, 28, 35, 15);
+    doc.addImage(data.encabezado.logocda, "PNG", 15, 28, 35, 15);
     doc.rect(90, 23, 115, 24); // Rectángulo grande para datos CDA
 
     doc.setFontSize(11);
